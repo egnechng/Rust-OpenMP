@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	int t = atoi(argv[1]);
 	
 	//size of matrix
-	int size = 10000;
+	int size = 200;
 
 	double runtime;
 
