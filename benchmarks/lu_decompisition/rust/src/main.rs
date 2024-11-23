@@ -3,7 +3,7 @@ use std::time::Instant;
 use rayon::prelude::*;
 
 // Define a constant size for the matrices (this must be known at compile-time)
-const SIZE: usize = 1000;
+const SIZE: usize = 200;
 
 // Function to perform LU decomposition
 fn l_u_d(a: &mut [[f32; SIZE]; SIZE], l: &mut [[f32; SIZE]; SIZE], u: &mut [[f32; SIZE]; SIZE], size: usize) {
