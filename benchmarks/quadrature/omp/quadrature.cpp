@@ -19,13 +19,14 @@ int main ( int argc, char *argv[] )
 {
   // num_threads
   int t = atoi(argv[1]);
-	
+  int n = atoi(argv[2]);
+
   double a = 0.0;
   double b = 10.0;
   double error;
   double exact = 0.49936338107645674464;
   int i;
-  int n = 10000000;
+  // int n = 10000000;
   double total;
   double wtime;
   double x;
@@ -64,7 +65,7 @@ int main ( int argc, char *argv[] )
   cout << "\n";
   cout << "  Estimate = " << setprecision(16) << setw(24) << total << "\n";
   cout << "  Error    = " << error << "\n";
-  cout << "  W time   = " << wtime << "\n";
+  stderr << "Time for actual program:(" << runtime << ")s" << endl;;
 //
 //  Terminate.
 //

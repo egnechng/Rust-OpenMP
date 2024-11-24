@@ -59,13 +59,13 @@ void parallel_histogram(int *data, int n, int *histogram, int num_threads) {
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
-        fprintf(stderr, "Usage: %s <problem size N> <number of threads t>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <number of threads t> <problem size N>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
     // Parse command-line arguments
-    int n = atoi(argv[1]); 
-    int num_threads = atoi(argv[2]);
+    int num_threads = atoi(argv[1]);
+    int n = atoi(argv[2]); 
 
     omp_set_num_threads(num_threads);
     int seed = 40; // Fixed seed
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     parallel_histogram(data, n, histogram, num_threads);
     double end_time = omp_get_wtime();
 
-    printf("Histogram calculation completed in %f seconds.\n", end_time - start_time);
+    fprintf(stderr,"Time for actual program:(%f)s\n", end_time - start_time);
 
     free(data);
     free(histogram);

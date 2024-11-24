@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 
 
@@ -10,10 +11,10 @@ benchmark_settings = {
     "merge_sort":{
         "sizes":[10000,50000,1000000,2500000,5000000,7500000,10000000],        
     },
-    "lu_decomposition":{
-        "cpp":True,
-        "sizes":[50, 100, 200, 400, 800],
-    },
+    # "lu_decomposition":{
+    #     "cpp":True,
+    #     "sizes":[50, 100, 200, 400, 800],
+    # },
     "quadrature":{
         "cpp":True,
         "sizes":[1000, 10000, 100000, 1000000],   
@@ -29,8 +30,11 @@ benchmark_settings = {
     },
 }
 thread_counts = [1,2,4,8,16,32]
-benchmarks = {"histogram":{},"merge_sort":{},"lu_decomposition":{},
-             "quadrature":{}, "monte_carlo":{},"needleman_wunsch":{}}
+benchmarks = {"histogram":{},
+              "merge_sort":{},
+            #   "lu_decomposition":{},
+             "quadrature":{}, 
+             "monte_carlo":{},"needleman_wunsch":{}}
 
 if os.path.isfile("saved_suite_history.json"):
     with open("saved_suite_history.json","r") as f:
@@ -56,7 +60,7 @@ for b_name, attributes in benchmarks.items():
     compile_command.append(f'{b_name}{extension}')
     
     result = subprocess.run(compile_command,
-                            capture_output = True, text = True,
+                            stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"omp"))
     # print(result.stderr)
 
@@ -65,25 +69,56 @@ for b_name, attributes in benchmarks.items():
     attributes.setdefault("omp_compiletime",[]).append(elapsed)
     # print(result.stderr)
 
-    ### rust compile
+    ## rust compile
     subprocess.run(['cargo', 'clean', '--release'],
-                            capture_output = True, text = True,
+                            stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"rust"))
     result  = subprocess.run(['time', 'cargo', 'build', '--release'],
-                            capture_output = True, text = True,
+                            stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"rust"))
     
     elapsed_string =  [x for x in result.stderr.split(" ") if "elapsed" in x][0].replace("elapsed","")
     elapsed = float(elapsed_string.split(":")[0]) * 60 + float(elapsed_string.split(":")[1])
     attributes.setdefault("rust_compiletime",[]).append(elapsed)
 
-    # ### omp run
-    # for tc in thread_counts:
-    #     for ps in benchmark_settings[b_name]["sizes"]:
-    #         run_command = [f"./{b_name}",str(tc)]
-    #         result  = subprocess.run(['time', 'cargo', 'build', '--release'],
-    #                         capture_output = True, text = True,
-    #                         cwd=os.path.join(BASE_DIR,b_name,"rust"))
+    for tc in thread_counts:
+        for ps in benchmark_settings[b_name]["sizes"]:
+            
+            ### omp run
+            run_command = ["perf", "stat","-d","-d",f"./{b_name}",str(tc)]
+            if "needs_input_files" in benchmark_settings[b_name]:
+                run_command.extend([f"../{ps}input1.txt",f"../{ps}input2.txt"])
+            else:
+                run_command.append(str(ps))
+            
+            if "extra_inputs" in benchmark_settings[b_name]:
+                run_command.extend(benchmark_settings[b_name]["extra_inputs"])
+            print(run_command)
+            result  = subprocess.run(run_command,
+                            stderr=subprocess.PIPE, text = True,
+                            cwd=os.path.join(BASE_DIR,b_name,"omp"))
+            print(result.stderr)
+            elapsed_string = [x for x in result.stderr.split("\n") if "Time for actual program:" in x][0]
+            elapsed = float(re.search('\(([^)]+)',elapsed_string).group(1))
+            attributes.setdefault("omp_run_stats",{}).setdefault(tc,{}).setdefault(ps,{})["timing"] = elapsed
+
+            # ### rust run
+            # run_command = ["perf", "stat","-d","-d" f"./{b_name}",str(tc)]
+            # if "needs_input_files" in benchmark_settings[b_name]:
+            #     run_command.extend([f"../{ps}input1.txt",f"../{ps}input2.txt"])
+            # else:
+            #     run_command.append(str(ps))
+            
+            # if "extra_inputs" in benchmark_settings[b_name]:
+            #     run_command.extend(benchmark_settings[b_name]["extra_inputs"])
+
+            # result  = subprocess.run(run_command,
+            #                 std_err=subprocess.PIPE, text = True,
+            #                 cwd=os.path.join(BASE_DIR,b_name,"rust"))
+            # elapsed_string = [x for x in result.stderr.split("\n") if "Time for actual program:" in x][0]
+            # elapsed = float(re.search('\(([^)]+)',elapsed_string).group(1))
+            # attributes.setdefault("omp_run_stats",{}).setdefault(tc,{}).setdefault(ps,{})["timing"] = elapsed
+            
 
 print(benchmarks)
 

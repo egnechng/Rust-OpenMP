@@ -25,12 +25,15 @@ fn main() {
     let threads = &args[1].to_string();
     let num_threads = threads.parse::<i32>().unwrap() as usize;
 
+    let n_amount_string = &args[2].to_string();
+    let n = n_amount_string.parse::<i32>().unwrap() as usize;
+
     rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
     
     let a = 0.0;
     let b = 10.0;
     let exact = 0.49936338107645674464;
-    let n = 10_000_000;
+    // let n = 10_000_000;
     
     println!("\nEstimate the integral of f(x) from A to B.");
     println!("f(x) = 50 / (π * (2500 * x² + 1)).\n");
@@ -55,7 +58,7 @@ fn main() {
 
     println!("\nEstimate = {:.16}", total);
     println!("Error = {}", error);
-    println!("Wall time = {:.6} seconds", elapsed_time);
+    eprintln!("Time for actual program:({:.12?})s", elapsed_time);
 
     println!("\nQUAD_OPENMP:");
     println!("Normal end of execution.\n");

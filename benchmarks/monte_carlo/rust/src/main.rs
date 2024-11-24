@@ -36,7 +36,7 @@ fn main() {
         if landed <= radius_squared {1}else {0}
     }).reduce(|| 0, |a, b| a + b);
 
-    println!("Time for actual program: {:.12?}", timing.elapsed().as_secs_f64());
+    eprintln!("Time for actual program:({:.12?})s", timing.elapsed().as_secs_f64());
 
     let pi_estimate = 4.0 * (circle_count as f64 / trial_count as f64);
     

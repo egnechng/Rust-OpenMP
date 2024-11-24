@@ -79,12 +79,13 @@ int main(int argc, char** argv) {
     int size, seed, numThreads;
 
     if (argc < 3) {
-        fprintf(stderr, "Usage: %s [number of elements] [number of threads]\n", argv[0]);
+        fprintf(stderr, "Usage: %s [number of threads] [number of elements]\n", argv[0]);
         exit(-1);
     }
 
-    size = atoi(argv[1]);
-    numThreads = atoi(argv[2]);
+
+    numThreads = atoi(argv[1]);
+    size = atoi(argv[2]);
     seed = 40;
 
     array = randNumArray(size, seed);
@@ -103,7 +104,7 @@ int main(int argc, char** argv) {
 
     double end_time = omp_get_wtime();
 
-    fprintf(stderr, "Elapsed time: %f seconds\n", end_time - start_time);
+    fprintf(stderr, "Time for actual program:(%f)s\n", end_time - start_time);
     free(array);
 
     return 0;

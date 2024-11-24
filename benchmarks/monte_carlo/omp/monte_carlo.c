@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <omp.h>
 
-//gcc -Wall -std=c99 -fopenmp -o monte monte-carlo.c; ./monte 128 100000000
-
 int main(int argc, char* argv[]){
 
     double t_start = 0.0, ttaken;
@@ -52,7 +50,7 @@ int main(int argc, char* argv[]){
     ttaken = omp_get_wtime() - t_start;
     
     printf("\n %lld trials, pi is %lf \n",trial_count, pi_estimate);
-    printf("Time take for the main part: %f\n", ttaken);
+    fprintf(stderr, "Time for actual program:(%f)s\n", ttaken);
 
 
 

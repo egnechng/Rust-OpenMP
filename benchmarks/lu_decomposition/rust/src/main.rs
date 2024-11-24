@@ -105,5 +105,5 @@ fn main() {
     print_matrix(&u, SIZE);
 
     // Print runtime
-    println!("LU Decomposition Time: {:.6} seconds", duration.as_secs_f64());
+    eprintln!("Time for actual program:({:.12?})s", duration.as_secs_f64());
 }

@@ -41,14 +41,14 @@ fn main() {
 
     if args.len() != 3 {
         eprintln!(
-            "Usage: {} <problem size N> <number of threads t>",
+            "Usage: {}  <number of threads t> <problem size N>",
             args[0]
         );
         std::process::exit(1);
     }
 
-    let n: usize = args[1].parse().expect("N must be a positive integer");
-    let num_threads: usize = args[2].parse().expect("t must be a positive integer");
+    let num_threads: usize = args[1].parse().expect("t must be a positive integer");
+    let n: usize = args[2].parse().expect("N must be a positive integer");
 
     if n == 0 || num_threads == 0 {
         eprintln!("Error: N and t must be greater than 0.");
@@ -69,7 +69,7 @@ fn main() {
     let _histogram = pool.install(|| parallel_histogram(&data, NUM_BINS)); // _ for unused variable
     let duration = start_time.elapsed();
 
-    println!("Histogram calculation completed in {:?}", duration);
+    eprintln!("Time for actual program:({:.12?})s", duration.as_secs_f64());
 
     /* print the histogram
     for (i, count) in histogram.iter().enumerate() {

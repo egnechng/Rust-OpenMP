@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 
     end_time = omp_get_wtime();
 
-    printf("Time to execute: %lf\n", end_time-start_time);
+    fprintf(stderr, "Time for actual program:(%f)s\n", end_time-start_time);
     int actual_score = scores[(input1_len - 1) * input2_len + (input2_len - 1)];
     printf("Actual best score: %d\n", actual_score);
 

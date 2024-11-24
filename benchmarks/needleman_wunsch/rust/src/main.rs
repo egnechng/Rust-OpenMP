@@ -106,7 +106,7 @@ fn main() {
                 }
             });
     }
-    println!("Time to execute: {:.4?}", timing.elapsed());
+    eprintln!("Time for actual program:({:.12?})s", timing.elapsed().as_secs_f64());
 
     let actual_score = scores[(input1_len - 1) * input2_len + (input2_len - 1)];
     print!("Actual best score: {}\n", actual_score);

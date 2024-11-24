@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	int t = atoi(argv[1]);
 	
 	//size of matrix
-	int size = 200;
+	int size = atoi(argv[2]);
 
 	double runtime;
 
@@ -162,8 +162,6 @@ int main(int argc, char** argv)
 	//print_matrix_2D(l, size);
 	//cout << "U Matrix:" << endl;
 	//print_matrix_2D(u, size);
-	cout << "LUD Decomposition Time: ";
-	cout << runtime;
-	cout << " seconds" << endl;;
+	stderr << "Time for actual program:(" << runtime << ")s" << endl;;
 	return 0;
 }
