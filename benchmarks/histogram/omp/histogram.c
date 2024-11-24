@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     parallel_histogram(data, n, histogram, num_threads);
     double end_time = omp_get_wtime();
 
-    fprintf(stderr,"Time for actual program:(%f)s\n", end_time - start_time);
+    fprintf(stderr,"Time for actual program:(%.12f)s\n", end_time - start_time);
 
     free(data);
     free(histogram);

@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
             int mat_y = j;
             int mat_x = i - j + 1;
             int is_match = 1;
-            if input2[mat_x - 1] != input1[mat_y - 1]{
+            if (input2[mat_x - 1] != input1[mat_y - 1]){
                 is_match = -1;
             }
             int score_if_match = scores[(mat_y - 1)* input2_len + mat_x - 1] + is_match;
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 
     end_time = omp_get_wtime();
 
-    fprintf(stderr, "Time for actual program:(%f)s\n", end_time-start_time);
+    fprintf(stderr, "Time for actual program:(%.12f)s\n", end_time-start_time);
     int actual_score = scores[(input1_len - 1) * input2_len + (input2_len - 1)];
     printf("Actual best score: %d\n", actual_score);
 

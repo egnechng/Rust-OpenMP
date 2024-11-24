@@ -50,7 +50,7 @@ int main(int argc, char* argv[]){
     ttaken = omp_get_wtime() - t_start;
     
     printf("\n %lld trials, pi is %lf \n",trial_count, pi_estimate);
-    fprintf(stderr, "Time for actual program:(%f)s\n", ttaken);
+    fprintf(stderr, "Time for actual program:(%.12f)s\n", ttaken);
 
 
 

@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 
     double end_time = omp_get_wtime();
 
-    fprintf(stderr, "Time for actual program:(%f)s\n", end_time - start_time);
+    fprintf(stderr, "Time for actual program:(%.12f)s\n", end_time - start_time);
     free(array);
 
     return 0;
