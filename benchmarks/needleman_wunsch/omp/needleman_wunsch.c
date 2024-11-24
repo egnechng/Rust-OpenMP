@@ -11,11 +11,10 @@ int main(int argc, char **argv) {
     double start_time,end_time;
     int t_count;
     bool print_scores = false;
-    int best_score = 0;
 
 
-    if(argc != 6){
-        printf("You need to enter the thread count and two input files, print traceback flag, and expected best score.\n");
+    if(argc != 5){
+        printf("You need to enter the thread count, two input files, and print traceback flag\n");
         return 1;
     }
 
@@ -23,7 +22,6 @@ int main(int argc, char **argv) {
     if (strcmp(argv[4], "true") == 0){
         print_scores = true;
     }
-    best_score = atoi(argv[5]);
 
     char* input1;
     int input1_len = 0;
@@ -93,15 +91,18 @@ int main(int argc, char **argv) {
 
         #pragma omp for schedule(static)
         for(int j = fmax(1, i-input2_len+2); j < min_value; j++) {
-            int y_index = j;
-            int x_index = i - j + 1;
-            int match = input2[x_index - 1] == input1[y_index - 1] ? 1 : -1;
-            int match_score = scores[(y_index - 1)* input2_len + x_index - 1] + match;
-            int gap_score_left = scores[y_index * input2_len + x_index - 1] -1;
-            int gap_score_top = scores[(y_index - 1) * input2_len + x_index] -1;
-            int max_score = fmax(gap_score_left, gap_score_top);
-            max_score = fmax(match_score, max_score);
-            scores[y_index * input2_len + x_index] = max_score;
+            int mat_y = j;
+            int mat_x = i - j + 1;
+            int is_match = 1;
+            if input2[mat_x - 1] != input1[mat_y - 1]{
+                is_match = -1;
+            }
+            int score_if_match = scores[(mat_y - 1)* input2_len + mat_x - 1] + is_match;
+            int dp_left = scores[mat_y * input2_len + mat_x - 1] - 1;
+            int dp_top = scores[(mat_y - 1) * input2_len + mat_x] - 1;
+            int dp_max = fmax(dp_left, dp_top);
+            dp_max = fmax(score_if_match, dp_max);
+            scores[mat_y * input2_len + mat_x] = dp_max;
         }
     }
 
@@ -110,12 +111,6 @@ int main(int argc, char **argv) {
     printf("Time to execute: %lf\n", end_time-start_time);
     int actual_score = scores[(input1_len - 1) * input2_len + (input2_len - 1)];
     printf("Actual best score: %d\n", actual_score);
-    printf("Expected best score: %d\n", best_score);
-    if (actual_score == best_score){
-        printf("Algorithm correctness satisfied.\n");
-    }else{
-        printf("Algorithm correctness not satisfied.\n");
-    }
 
     free(input1);
     free(input2);

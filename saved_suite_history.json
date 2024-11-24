@@ -1,0 +1,62 @@
+{
+  "histogram": {
+    "omp_compiletime": [
+      0.14,
+      0.12
+    ],
+    "rust_compiletime": [
+      15.17,
+      15.18
+    ]
+  },
+  "lu_decomposition": {
+    "omp_compiletime": [
+      0.92,
+      0.89
+    ],
+    "rust_compiletime": [
+      14.46,
+      14.41
+    ]
+  },
+  "merge_sort": {
+    "omp_compiletime": [
+      0.12,
+      0.12
+    ],
+    "rust_compiletime": [
+      14.28,
+      14.17
+    ]
+  },
+  "monte_carlo": {
+    "omp_compiletime": [
+      0.11,
+      0.11
+    ],
+    "rust_compiletime": [
+      14.39,
+      14.44
+    ]
+  },
+  "needleman_wunsch": {
+    "omp_compiletime": [
+      0.2,
+      0.15
+    ],
+    "rust_compiletime": [
+      10.56,
+      10.73
+    ]
+  },
+  "quadrature": {
+    "omp_compiletime": [
+      1.13,
+      1.08
+    ],
+    "rust_compiletime": [
+      10.72,
+      10.81
+    ]
+  }
+}
