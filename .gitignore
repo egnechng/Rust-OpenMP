@@ -60,3 +60,4 @@ target/
 graphing/*
 !graphing/graphing_env.sh
 !graphing/results_graph.ipynb
+!graphing/metric_figs

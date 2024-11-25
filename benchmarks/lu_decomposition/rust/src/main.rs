@@ -62,15 +62,15 @@ fn random_fill(matrix: &mut Vec<Vec<f32>>, size: usize) {
     }
 }
 
-// Function to print matrix
-fn print_matrix(matrix: &Vec<Vec<f32>>, size: usize) {
-    for i in 0..size {
-        for j in 0..size {
-            print!("{:8.2} ", matrix[i][j]);
-        }
-        println!();
-    }
-}
+// // Function to print matrix
+// fn print_matrix(matrix: &Vec<Vec<f32>>, size: usize) {
+//     for i in 0..size {
+//         for j in 0..size {
+//             print!("{:8.2} ", matrix[i][j]);
+//         }
+//         println!();
+//     }
+// }
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();

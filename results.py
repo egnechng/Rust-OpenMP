@@ -47,15 +47,35 @@ if os.path.isfile("saved_suite_history.json"):
             pass
 
 
+
+def extract_elapsed(stderr):
+    elapsed_string =  [x for x in stderr.split(" ") if "elapsed" in x][0].replace("elapsed","")
+    return float(elapsed_string.split(":")[0]) * 60 + float(elapsed_string.split(":")[1])
+
 def extract_perf_stats(serr,res):
+    total_wall_time = extract_elapsed(serr)
+    res.setdefault("runtime_overhead",[]).append(max(total_wall_time-res["wall_time"][-1],0))
+
     s_line = [x for x in serr.split("\n") if "cycles:u" in x][0]
     if s_line.split(",")[-1] == 'GHz':
         res.setdefault("cycles_ghz",[]).append(float(s_line.split(",")[-2]))
+
     s_line = [x for x in serr.split("\n") if "task-clock:u" in x][0]
     res.setdefault("cpus_used",[]).append(float(s_line.split(",")[-2]))
+
     s_line = [x for x in serr.split("\n") if "LLC-loads:u" in x][0]
     if s_line.split(",")[-1] == 'K/sec':
-        res.setdefault("ll_load_k_sec",[]).append(float(s_line.split(",")[-2]))
+        res.setdefault("last_l_load_per_sec",[]).append(float(s_line.split(",")[-2])*1000)
+    if s_line.split(",")[-1] == 'M/sec':
+        res.setdefault("last_l_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000)
+
+    s_line = [x for x in serr.split("\n") if "L1-dcache-loads:u" in x][0]
+    if s_line.split(",")[-1] == 'K/sec':
+        res.setdefault("l1_load_per_sec",[]).append(float(s_line.split(",")[-2])*1000)
+    if s_line.split(",")[-1] == 'M/sec':
+        res.setdefault("l1_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000)
+        
+
     s_line = [x for x in serr.split("\n") if "LLC-load-misses:u" in x][0]
     if s_line.split(",")[-1] == 'of all LL-cache accesses':
         res.setdefault("ll_miss_percent",[]).append(float(s_line.split(",")[-2]))
@@ -87,12 +107,9 @@ for b_name, attributes in benchmarks.items():
     result = subprocess.run(compile_command,
                             stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"omp"))
-    print(result.stderr)
-
-    elapsed_string =  [x for x in result.stderr.split(" ") if "elapsed" in x][0].replace("elapsed","")
-    elapsed = float(elapsed_string.split(":")[0]) * 60 + float(elapsed_string.split(":")[1])
-    attributes.setdefault("omp_compiletime",[]).append(elapsed)
     # print(result.stderr)
+
+    attributes.setdefault("omp_compiletime",[]).append(extract_elapsed(result.stderr))
 
     ## rust compile
     subprocess.run(['cargo', 'clean', '--release'],
@@ -102,15 +119,13 @@ for b_name, attributes in benchmarks.items():
                             stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"rust"))
     
-    elapsed_string =  [x for x in result.stderr.split(" ") if "elapsed" in x][0].replace("elapsed","")
-    elapsed = float(elapsed_string.split(":")[0]) * 60 + float(elapsed_string.split(":")[1])
-    attributes.setdefault("rust_compiletime",[]).append(elapsed)
+    attributes.setdefault("rust_compiletime",[]).append(extract_elapsed(result.stderr))
 
     for tc in thread_counts:
         for ps in benchmark_settings[b_name]["sizes"]:
             
             ### omp run
-            run_command = ["perf", "stat","-d","-d","--no-big-num","-x",",",f"./{b_name}",str(tc)]
+            run_command = ["perf", "stat","-d","-d","--no-big-num","-x",",","time",f"./{b_name}",str(tc)]
             if "needs_input_files" in benchmark_settings[b_name]:
                 run_command.extend([f"../{ps}input1.txt",f"../{ps}input2.txt"])
             else:
@@ -129,8 +144,9 @@ for b_name, attributes in benchmarks.items():
                                   ).setdefault(tc,{}
                                 ).setdefault(ps,{}).setdefault("wall_time",[]).append(elapsed)
             extract_perf_stats(result.stderr,attributes["omp_run_stats"][tc][ps])
+
             ### rust run
-            run_command = ["perf", "stat","-d","-d","--no-big-num","-x",",","cargo","run","--release",str(tc)]
+            run_command = ["perf", "stat","-d","-d","--no-big-num","-x",",","time","cargo","run","--release",str(tc)]
             if "needs_input_files" in benchmark_settings[b_name]:
                 run_command.extend([f"../{ps}input1.txt",f"../{ps}input2.txt"])
             else:

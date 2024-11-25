@@ -154,9 +154,9 @@ int main(int argc, char** argv)
 	//cout << "A Matrix: " << endl;
 	//print_matrix_2D(a, size);
 	//do LU decomposition
-	runtime = clock() / (double)CLOCKS_PER_SEC;
+	runtime = omp_get_wtime ( );
 	l_u_d(a, l, u, size, t);
-	runtime = (clock() / (double)CLOCKS_PER_SEC) - runtime;
+	runtime = omp_get_wtime ( ) - runtime;
 	//print l and u
 	//cout << "L Matrix: " << endl;
 	//print_matrix_2D(l, size);
