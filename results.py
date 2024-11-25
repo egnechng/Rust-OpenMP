@@ -68,12 +68,16 @@ def extract_perf_stats(serr,res):
         res.setdefault("last_l_load_per_sec",[]).append(float(s_line.split(",")[-2])*1000)
     if s_line.split(",")[-1] == 'M/sec':
         res.setdefault("last_l_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000)
+    if s_line.split(",")[-1] == 'G/sec':
+        res.setdefault("last_l_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000_000)
 
     s_line = [x for x in serr.split("\n") if "L1-dcache-loads:u" in x][0]
     if s_line.split(",")[-1] == 'K/sec':
         res.setdefault("l1_load_per_sec",[]).append(float(s_line.split(",")[-2])*1000)
     if s_line.split(",")[-1] == 'M/sec':
         res.setdefault("l1_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000)
+    if s_line.split(",")[-1] == 'G/sec':
+        res.setdefault("l1_load_per_sec",[]).append(float(s_line.split(",")[-2])*1_000_000_000)
         
 
     s_line = [x for x in serr.split("\n") if "LLC-load-misses:u" in x][0]
