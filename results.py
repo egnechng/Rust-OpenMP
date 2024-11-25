@@ -11,10 +11,10 @@ benchmark_settings = {
     "merge_sort":{
         "sizes":["10000","50000","1000000","2500000","5000000","7500000","10000000"],        
     },
-    # "lu_decomposition":{
-    #     "cpp":True,
-    #     "sizes":[50, 100, 200, 400, 800],
-    # },
+    "lu_decomposition":{
+        "cpp":True,
+        "sizes":["50", "100", "200", "400", "800"],
+    },
     "quadrature":{
         "cpp":True,
         "sizes":["1000", "10000", "100000", "1000000"],   
@@ -31,13 +31,13 @@ benchmark_settings = {
 }
 thread_counts = ["1","2","4","8","16","32"]
 benchmarks = {
-    # "histogram":{},
-            #   "merge_sort":{},
-            #  "lu_decomposition":{},
-            #  "quadrature":{}, 
-             "monte_carlo":{},
-            #  "needleman_wunsch":{}
-            }
+    "histogram":{},
+    "merge_sort":{},
+    "lu_decomposition":{},
+    "quadrature":{}, 
+    "monte_carlo":{},
+    "needleman_wunsch":{}
+}
 
 if os.path.isfile("saved_suite_history.json"):
     with open("saved_suite_history.json","r") as f:
@@ -53,6 +53,12 @@ def extract_perf_stats(serr,res):
         res.setdefault("cycles_ghz",[]).append(float(s_line.split(",")[-2]))
     s_line = [x for x in serr.split("\n") if "task-clock:u" in x][0]
     res.setdefault("cpus_used",[]).append(float(s_line.split(",")[-2]))
+    s_line = [x for x in serr.split("\n") if "LLC-loads:u" in x][0]
+    if s_line.split(",")[-1] == 'K/sec':
+        res.setdefault("ll_load_k_sec",[]).append(float(s_line.split(",")[-2]))
+    s_line = [x for x in serr.split("\n") if "LLC-load-misses:u" in x][0]
+    if s_line.split(",")[-1] == 'of all LL-cache accesses':
+        res.setdefault("ll_miss_percent",[]).append(float(s_line.split(",")[-2]))
     # s_line = [x for x in result.stderr.split("\n") if "LLC-load-misses:u" in x][0]
     # res["cpus_used"] = s_line.split(",")[-2]
     # cycles ghz only
@@ -89,9 +95,9 @@ for b_name, attributes in benchmarks.items():
     # print(result.stderr)
 
     ## rust compile
-    # subprocess.run(['cargo', 'clean', '--release'],
-    #                         stderr=subprocess.PIPE, text = True,
-    #                         cwd=os.path.join(BASE_DIR,b_name,"rust"))
+    subprocess.run(['cargo', 'clean', '--release'],
+                            stderr=subprocess.PIPE, text = True,
+                            cwd=os.path.join(BASE_DIR,b_name,"rust"))
     result  = subprocess.run(['time', 'cargo', 'build', '--release'],
                             stderr=subprocess.PIPE, text = True,
                             cwd=os.path.join(BASE_DIR,b_name,"rust"))

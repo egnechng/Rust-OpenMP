@@ -93,7 +93,7 @@ fn main() {
 
     // Print original matrix A
     println!("A Matrix:");
-    print_matrix(&a, size);
+    // print_matrix(&a, size);
 
     // Perform LU Decomposition
     let start_time = Instant::now();
@@ -107,5 +107,5 @@ fn main() {
     //print_matrix(&u, size);
 
     // Print runtime
-    println!("LU Decomposition Time: {:.6} seconds", duration.as_secs_f64());
+    eprintln!("Time for actual program:({:.12?})s", duration.as_secs_f64());
 }

@@ -162,6 +162,6 @@ int main(int argc, char** argv)
 	//print_matrix_2D(l, size);
 	//cout << "U Matrix:" << endl;
 	//print_matrix_2D(u, size);
-	stderr << "Time for actual program:(" << runtime << ")s" << endl;;
+	cerr << "Time for actual program:(" << runtime << ")s" << endl;;
 	return 0;
 }

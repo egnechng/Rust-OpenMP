@@ -65,7 +65,7 @@ int main ( int argc, char *argv[] )
   cout << "\n";
   cout << "  Estimate = " << setprecision(16) << setw(24) << total << "\n";
   cout << "  Error    = " << error << "\n";
-  stderr << "Time for actual program:(" << runtime << ")s" << endl;;
+  cerr << "Time for actual program:(" << wtime << ")s" << endl;;
 //
 //  Terminate.
 //

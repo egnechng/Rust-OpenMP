@@ -45,3 +45,10 @@ Run the script:
 ```bash
 ./run.sh
 ```
+
+# Creating Graphs
+Within the `/graphing` folder, there is bash script (use `chmod +x graphing_env.sh` to make it executable).<br>
+Run this to create the venv that will allow you to use the graphing modules seaborn/matplotlib/etc.<br>
+Then, after running the script you can run `juypter lab` or in vscode just make sure to use the `graphing` kernel.<br>
+You can then feel free to run the cells to recreate/modify the graphs. As said above the data will be drawn
+from the file `saved_suite_history.json`.
