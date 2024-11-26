@@ -38,7 +38,6 @@ Example:
 
 ```bash
 ./histogram 4 10000000 #  t = 4 threads, N = 10M
-
 ```
 
 ## Compiling Rust code
@@ -48,13 +47,12 @@ Run these commands within the `benchmarks/<benchmark>/rust` folder.
 cargo build --release
 ```
 
-Running individual bin file
+Running src main.rs file
 ```bash
 cargo run --release <number of threads t> <problem size N> 
 ```
 
-Example:
-
+Example (for `benchmarks/histogram/rust`):
 ```bash
-cargo run --bin histogram 10000000 4  # t = 4 threads, N = 10M
+cargo run --release 10000000 4  # t = 4 threads, N = 10M
 ```
