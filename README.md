@@ -20,7 +20,7 @@ Then, after running the script you can run either (1) run `cd graphing`, `source
 You can then feel free to run the cells to recreate/modify the graphs. As said above the data will be drawn from the file `saved_suite_history.json`.
 
 ## Compiling C/C++ Code (OpenMP)
-Run these commands within the `benchmarks/<benchmark>/omp` folder.\n
+Run these commands within the `benchmarks/<benchmark>/omp` folder.  
 C:
 ``` bash
 gcc -Wall -std=c99 -fopenmp -o <executable> <file_name>
