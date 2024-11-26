@@ -19,10 +19,15 @@ Run this to create the `venv` that will allow you to use the graphing modules se
 Then, after running the script you can run either (1) run `cd graphing`, `source bin/activate`, `juypter lab` or (recommended) in VSCode, **open the `graphing/results_graph.ipnyb` notebook** and make sure to use the `graphing` kernel.<br>
 You can then feel free to run the cells to recreate/modify the graphs. As said above the data will be drawn from the file `saved_suite_history.json`.
 
-## Compiling C Code (OpenMP)
+## Compiling C/C++ Code (OpenMP)
 Run these commands within the `benchmarks/<benchmark>/omp` folder.
+C:
 ``` bash
 gcc -Wall -std=c99 -fopenmp -o <executable> <file_name>
+```
+C++:
+``` bash
+g++ -Wall -fopenmp -o <executable> <file_name>
 ```
 Running individual program
 ```bash
