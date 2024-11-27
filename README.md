@@ -1,6 +1,8 @@
 # Rust vs. OpenMP 
 A project comparing Rust and OpenMP via various benchmarks for CSCI-GA 3033 (Multicore Processors & Architecture)
 
+## Report PDF
+File: Report - Parallel Benchmarking_A Performance Comparison of Rust Rayon and C,C++_OpenMP.pdf, also on [Github](https://github.com/egnechng/Rust-OpenMP/blob/main/Report%20-%20Parallel%20Benchmarking_A%20Performance%20Comparison%20of%20Rust%20Rayon%20and%20C%2CC%2B%2B_OpenMP.pdf).
 ## Running Benchmark Suite
 The suite is run through a python script `results.py`.<br>
 Doing this will run through all the compilation and the running of the programs across the different axis (threads/problem-sizes).<br>
